@@ -1,0 +1,22 @@
+# Test Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies for mongodb-memory-server
+RUN apk add --no-cache python3 make g++
+
+# Copy package files
+COPY package*.json ./
+
+# Install all dependencies (including devDependencies)
+RUN npm ci
+
+# Copy source code and tests
+COPY . .
+
+# Set environment
+ENV NODE_ENV=test
+
+# Run tests
+CMD ["npm", "test"]
