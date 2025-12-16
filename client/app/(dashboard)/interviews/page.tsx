@@ -26,12 +26,12 @@ export default function InterviewsPage() {
       {/* Page Header */}
       <div>
         <h1 className="text-2xl font-bold text-slate-900">
-          {isHR ? 'Interviews' : 'My Interviews'}
+          {isHR ? 'Собеседования' : 'Мои собеседования'}
         </h1>
         <p className="text-slate-500 mt-1">
           {isHR
-            ? 'Schedule and manage candidate interviews'
-            : 'View your upcoming and past interviews'}
+            ? 'Назначайте и управляйте собеседованиями кандидатов'
+            : 'Просматривайте предстоящие и прошлые собеседования'}
         </p>
       </div>
 

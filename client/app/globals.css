@@ -95,7 +95,7 @@
 
   /* Cards */
   .card {
-    @apply bg-white rounded-2xl shadow-sm border border-slate-200/60 p-6
+    @apply bg-white/80 rounded-2xl  border border-slate-200/60 p-6
            transition-all duration-200;
   }
 
@@ -182,12 +182,12 @@
   }
 
   .nav-item-active {
-    @apply bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800;
+    @apply bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-800;
   }
 
   /* Sidebar */
   .sidebar {
-    @apply w-72 bg-white border-r border-slate-200 min-h-screen flex flex-col;
+    @apply w-72 shadow-md min-h-screen flex flex-col;
   }
 
   .sidebar-header {

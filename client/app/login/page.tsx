@@ -10,10 +10,12 @@ import { LOGIN_MUTATION } from '@/graphql/mutations';
 import { useAuthStore } from '@/lib/stores/auth';
 import { useUIStore } from '@/lib/stores/ui';
 import { Input, Button } from '@/components/ui';
+import { ArrowRight, Briefcase, Users, Zap, Clipboard } from 'lucide-react';
+import React from 'react';
 
 const loginSchema = z.object({
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(1, 'Password is required'),
+  email: z.string().email('Неверный email'),
+  password: z.string().min(1, 'Пароль обязателен'),
 });
 
 type LoginForm = z.infer<typeof loginSchema>;
@@ -42,162 +44,199 @@ export default function LoginPage() {
         setAuth(result.data.login.user, result.data.login.token);
         addNotification({
           type: 'success',
-          message: 'Welcome back!',
+          message: 'Добро пожаловать!',
         });
         router.push('/dashboard');
       }
     } catch (error: any) {
       addNotification({
         type: 'error',
-        message: error.message || 'Login failed. Please try again.',
+        message: error.message || 'Ошибка входа. Попробуйте снова.',
       });
     }
   };
 
+  const features = [
+    { text: 'Управление вакансиями', icon: <Briefcase /> },
+    { text: 'Воронка кандидатов', icon: <Users /> },
+    { text: 'Быстрый отклик', icon: <Zap /> },
+    { text: 'История заявок', icon: <Clipboard /> },
+  ];
+
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side - Form */}
-      <div className="flex-1 flex items-center justify-center p-8 bg-white">
-        <div className="w-full max-w-md">
-          <div className="mb-8">
-            <Link href="/" className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center">
-                <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                </svg>
-              </div>
-              <span className="text-xl font-bold text-slate-900">HR Platform</span>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-400/5 to-purple-400/10 text-slate-900">
+      {/* Header */}
+      <nav className="sticky top-0 z-50 backdrop-blur-xl shadow-md">
+        <div className="container mx-auto px-7 py-4 flex items-center justify-between">
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/0 flex items-center justify-center">
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+              >
+                <defs>
+                  <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="100%" stopColor="#8B5CF6" />
+                  </linearGradient>
+                </defs>
+                <path
+                  stroke="url(#logo-gradient)"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <span className="text-xl font-bold text-slate-900">HR Platform</span>
+          </Link>
+
+          <div className="flex space-x-3">
+            <Link
+              href="/login"
+              className="px-5 py-2 text-blue-600 rounded-xl border border-blue-600 text-sm font-medium
+                        transform hover:scale-105 hover:bg-blue-100 transition duration-500"
+            >
+              Sign in
             </Link>
 
-            <h1 className="text-2xl font-bold text-slate-900">Welcome back</h1>
-            <p className="text-slate-500 mt-2">
-              Enter your credentials to access your account
-            </p>
+            <Link
+              href="/register"
+              className="relative px-5 py-2 rounded-xl text-sm font-medium text-white overflow-hidden
+                        flex items-center justify-center transform hover:scale-105 transition-transform duration-500"
+            >
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 z-0"></span>
+              <span className="relative z-10">Sign up</span>
+            </Link>
+          </div>
+        </div>
+      </nav>
+
+      {/* Main Content */}
+      <div className="flex flex-col lg:flex-row justify-center items-start py-12 px-4 gap-24">
+        {/* Left - Login Form */}
+        <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-2xl p-8 shadow-md">
+          <div className="flex flex-col items-center mb-8 text-center">
+            <h1 className="text-3xl font-semibold text-slate-900 mb-2">С возвращением!</h1>
+            <p className="text-slate-600">Введите ваши данные для входа в аккаунт</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div>
-              <Input
-                id="email"
-                type="email"
-                label="Email address"
-                placeholder="you@example.com"
-                error={errors.email?.message}
-                {...register('email')}
-              />
-            </div>
+            <Input
+              id="email"
+              type="email"
+              label="Электронная почта"
+              placeholder="you@example.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
+            <Input
+              id="password"
+              type="password"
+              label="Пароль"
+              placeholder="Введите пароль"
+              error={errors.password?.message}
+              {...register('password')}
+            />
 
-            <div>
-              <Input
-                id="password"
-                type="password"
-                label="Password"
-                placeholder="Enter your password"
-                error={errors.password?.message}
-                {...register('password')}
-              />
-            </div>
+            
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" />
-                <span className="text-sm text-slate-600">Remember me</span>
-              </label>
-              <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-700">
-                Forgot password?
-              </a>
-            </div>
-
-            <Button type="submit" loading={loading} className="w-full">
-              Sign in
-            </Button>
+            {/* Градиентная кнопка */}
+            <button
+              type="submit"
+              disabled={loading}
+              className="relative w-full px-5 py-2 rounded-xl text-sm font-medium text-white overflow-hidden
+                        flex items-center justify-center transform hover:scale-105 transition-transform duration-500"
+            >
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 z-0"></span>
+              <span className="relative z-10 flex items-center gap-2 justify-center">
+                Войти <ArrowRight size={16} />
+              </span>
+            </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-500">
-            Don't have an account?{' '}
+          <p className="mt-6 text-center text-sm text-slate-500">
+            Нет аккаунта?{' '}
             <Link href="/register" className="font-medium text-blue-600 hover:text-blue-700">
-              Create account
+              Создать аккаунт
             </Link>
           </p>
 
           {/* Demo Credentials */}
           <div className="mt-8 p-4 rounded-xl bg-slate-50 border border-slate-200">
-            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
-              Demo Credentials
-            </p>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">Демо аккаунты</p>
             <div className="space-y-2 text-sm">
               <div className="flex items-center justify-between">
-                <span className="text-slate-600">HR Manager:</span>
-                <code className="px-2 py-1 rounded bg-white text-slate-700 text-xs">
-                  hr@company.com
-                </code>
+                <span className="text-slate-600">HR Менеджер:</span>
+                <code className="px-2 py-1 rounded bg-white text-slate-700 text-xs">hr@company.com</code>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-600">Candidate:</span>
-                <code className="px-2 py-1 rounded bg-white text-slate-700 text-xs">
-                  candidate@email.com
-                </code>
+                <span className="text-slate-600">Кандидат:</span>
+                <code className="px-2 py-1 rounded bg-white text-slate-700 text-xs">candidate@email.com</code>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-600">Password:</span>
-                <code className="px-2 py-1 rounded bg-white text-slate-700 text-xs">
-                  password123
-                </code>
+                <span className="text-slate-600">Пароль:</span>
+                <code className="px-2 py-1 rounded bg-white text-slate-700 text-xs">password123</code>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Right Side - Branding */}
-      <div className="hidden lg:flex lg:flex-1 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-12 items-center justify-center relative overflow-hidden">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+        {/* Right - Platform Info */}
+        <div className="hidden lg:flex flex-col w-80 gap-6">
+          <ul className="space-y-4">
+            {features.map((f) => (
+              <li
+                key={f.text}
+                className="flex items-center gap-3 bg-white/50 backdrop-blur-md p-3 rounded-xl shadow-sm"
+              >
+                {React.cloneElement(f.icon, {
+                  className: 'w-6 h-6',
+                  stroke: 'url(#icon-gradient)',
+                  strokeWidth: 2,
+                })}
+                <span className="text-slate-800">{f.text}</span>
+              </li>
+            ))}
+          </ul>
+
+          <div className="grid grid-cols-2 gap-4 mt-6">
+            <div className="p-4 rounded-xl bg-white/50 backdrop-blur-md text-center">
+              <p className="text-2xl font-bold text-slate-900">500+</p>
+              <p className="text-sm text-slate-700">Вакансий</p>
+            </div>
+            <div className="p-4 rounded-xl bg-white/50 backdrop-blur-md text-center">
+              <p className="text-2xl font-bold text-slate-900">10k+</p>
+              <p className="text-sm text-slate-700">Кандидатов</p>
+            </div>
+            <div className="p-4 rounded-xl bg-white/50 backdrop-blur-md text-center">
+              <p className="text-2xl font-bold text-slate-900">95%</p>
+              <p className="text-sm text-slate-700">Успешных наймов</p>
+            </div>
+            <div className="p-4 rounded-xl bg-white/50 backdrop-blur-md text-center">
+              <p className="text-2xl font-bold text-slate-900">24/7</p>
+              <p className="text-sm text-slate-700">Поддержка</p>
+            </div>
+          </div>
+
+          {/* Gradient defs for icons */}
+          <svg style={{ height: 0 }}>
             <defs>
-              <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="1"/>
-              </pattern>
+              <linearGradient id="icon-gradient" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="#3B82F6" />
+                <stop offset="100%" stopColor="#8B5CF6" />
+              </linearGradient>
             </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
           </svg>
         </div>
-
-        <div className="relative z-10 max-w-lg text-white">
-          <div className="mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-white/20 backdrop-blur flex items-center justify-center mb-6">
-              <svg className="w-10 h-10" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z" />
-              </svg>
-            </div>
-            <h2 className="text-3xl font-bold mb-4">
-              Streamline Your Hiring Process
-            </h2>
-            <p className="text-blue-100 text-lg leading-relaxed">
-              Connect with top talent, manage applications efficiently, and make data-driven hiring decisions with our comprehensive recruitment platform.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <div className="p-4 rounded-xl bg-white/10 backdrop-blur">
-              <p className="text-3xl font-bold">500+</p>
-              <p className="text-blue-200 text-sm">Active Vacancies</p>
-            </div>
-            <div className="p-4 rounded-xl bg-white/10 backdrop-blur">
-              <p className="text-3xl font-bold">10k+</p>
-              <p className="text-blue-200 text-sm">Candidates</p>
-            </div>
-            <div className="p-4 rounded-xl bg-white/10 backdrop-blur">
-              <p className="text-3xl font-bold">95%</p>
-              <p className="text-blue-200 text-sm">Satisfaction Rate</p>
-            </div>
-            <div className="p-4 rounded-xl bg-white/10 backdrop-blur">
-              <p className="text-3xl font-bold">24/7</p>
-              <p className="text-blue-200 text-sm">Support</p>
-            </div>
-          </div>
-        </div>
       </div>
+
+      {/* Footer */}
+      <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
+        HR Recruitment Platform
+      </footer>
     </div>
   );
 }

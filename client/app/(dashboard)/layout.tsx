@@ -52,15 +52,21 @@ export default function DashboardLayout({
   }
 
   return (
-    <div className="flex min-h-screen bg-secondary-50">
+  <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-400/5 to-purple-400/10">
+    {/* HEADER — ВСЯ ШИРИНА */}
+    <Header />
+
+    {/* ОСНОВНАЯ СЕТКА */}
+    <div className="flex">
       <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Header />
-        <main className="flex-1 p-6 overflow-auto">
-          {children}
-        </main>
-      </div>
-      <NotificationContainer />
+
+      <main className="flex-1 p-6 overflow-auto">
+        {children}
+      </main>
     </div>
-  );
+
+    <NotificationContainer />
+  </div>
+);
+
 }
