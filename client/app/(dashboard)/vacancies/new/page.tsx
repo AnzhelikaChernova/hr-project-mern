@@ -11,15 +11,15 @@ import { useUIStore } from '@/lib/stores/ui';
 import { Button, Input, Select } from '@/components/ui';
 
 const vacancySchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(10, 'Description must be at least 10 characters'),
-  requirements: z.string().min(1, 'At least one requirement is needed'),
-  salaryMin: z.number().min(0, 'Minimum salary must be positive'),
-  salaryMax: z.number().min(0, 'Maximum salary must be positive'),
+  title: z.string().min(1, 'Название вакансии обязательно'),
+  description: z.string().min(10, 'Описание должно быть не менее 10 символов'),
+  requirements: z.string().min(1, 'Необходимо указать хотя бы одно требование'),
+  salaryMin: z.number().min(0, 'Минимальная зарплата должна быть положительной'),
+  salaryMax: z.number().min(0, 'Максимальная зарплата должна быть положительной'),
   currency: z.string().default('USD'),
-  location: z.string().min(1, 'Location is required'),
+  location: z.string().min(1, 'Местоположение обязательно'),
   type: z.enum(['FULL_TIME', 'PART_TIME', 'CONTRACT', 'REMOTE']),
-  department: z.string().min(1, 'Department is required'),
+  department: z.string().min(1, 'Отдел обязателен'),
   status: z.enum(['OPEN', 'DRAFT']),
 });
 
@@ -31,7 +31,7 @@ export default function NewVacancyPage() {
 
   const [createVacancy, { loading }] = useMutation(CREATE_VACANCY_MUTATION, {
     onCompleted: (data) => {
-      addNotification({ type: 'success', message: 'Vacancy created successfully!' });
+      addNotification({ type: 'success', message: 'Вакансия успешно создана!' });
       router.push(`/vacancies/${data.createVacancy.id}`);
     },
     onError: (error) => {
@@ -77,7 +77,7 @@ export default function NewVacancyPage() {
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      {/* Header */}
+      {/* Заголовок */}
       <div>
         <div className="flex items-center gap-3 mb-2">
           <Link href="/vacancies" className="p-2 rounded-lg hover:bg-slate-100 transition-colors">
@@ -85,12 +85,12 @@ export default function NewVacancyPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
             </svg>
           </Link>
-          <h1 className="text-2xl font-bold text-slate-900">Post New Vacancy</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Опубликовать новую вакансию</h1>
         </div>
-        <p className="text-slate-500 ml-11">Create a new job posting to attract top talent</p>
+        <p className="text-slate-500 ml-11">Создайте новую вакансию для подбора персонала</p>
       </div>
 
-      {/* Form */}
+      {/* Форма */}
       <div className="card">
         <div className="flex items-center gap-3 mb-6 pb-6 border-b border-slate-200">
           <div className="w-10 h-10 rounded-xl bg-blue-100 flex items-center justify-center">
@@ -99,24 +99,24 @@ export default function NewVacancyPage() {
             </svg>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900">Job Details</h3>
-            <p className="text-sm text-slate-500">Fill in the information below to create your job posting</p>
+            <h3 className="font-semibold text-slate-900">Детали вакансии</h3>
+            <p className="text-sm text-slate-500">Заполните информацию перед публикацией вакансии</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Input
-            label="Job Title"
-            placeholder="e.g. Senior Frontend Developer"
+            label="Название вакансии"
+            placeholder="Например: Senior Frontend Developer"
             error={errors.title?.message}
             {...register('title')}
           />
 
           <div>
-            <label className="label">Description</label>
+            <label className="label">Описание</label>
             <textarea
               className={`input min-h-40 resize-none ${errors.description ? 'input-error' : ''}`}
-              placeholder="Describe the role, responsibilities, and what makes it exciting..."
+              placeholder="Опишите роль, обязанности и что делает её интересной..."
               {...register('description')}
             />
             {errors.description && (
@@ -125,35 +125,35 @@ export default function NewVacancyPage() {
           </div>
 
           <div>
-            <label className="label">Requirements (one per line)</label>
+            <label className="label">Требования (каждое с новой строки)</label>
             <textarea
               className={`input min-h-32 resize-none ${errors.requirements ? 'input-error' : ''}`}
-              placeholder="5+ years of React experience&#10;Strong TypeScript skills&#10;Experience with GraphQL"
+              placeholder="5+ лет опыта с React&#10;Хорошее знание TypeScript&#10;Опыт с GraphQL"
               {...register('requirements')}
             />
             {errors.requirements && (
               <p className="mt-1 text-sm text-red-600">{errors.requirements.message}</p>
             )}
-            <p className="mt-1 text-xs text-slate-500">Enter each requirement on a new line</p>
+            <p className="mt-1 text-xs text-slate-500">Введите каждое требование с новой строки</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
-              label="Min Salary"
+              label="Минимальная зарплата"
               type="number"
               placeholder="80000"
               error={errors.salaryMin?.message}
               {...register('salaryMin', { valueAsNumber: true })}
             />
             <Input
-              label="Max Salary"
+              label="Максимальная зарплата"
               type="number"
               placeholder="120000"
               error={errors.salaryMax?.message}
               {...register('salaryMax', { valueAsNumber: true })}
             />
             <Select
-              label="Currency"
+              label="Валюта"
               options={[
                 { value: 'USD', label: 'USD' },
                 { value: 'EUR', label: 'EUR' },
@@ -165,54 +165,74 @@ export default function NewVacancyPage() {
           </div>
 
           <Input
-            label="Location"
-            placeholder="e.g. San Francisco, CA or Remote"
+            label="Местоположение"
+            placeholder="Например: Сан-Франциско, CA или Remote"
             error={errors.location?.message}
             {...register('location')}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select
-              label="Job Type"
+              label="Тип вакансии"
               options={[
-                { value: 'FULL_TIME', label: 'Full Time' },
-                { value: 'PART_TIME', label: 'Part Time' },
-                { value: 'CONTRACT', label: 'Contract' },
-                { value: 'REMOTE', label: 'Remote' },
+                { value: 'FULL_TIME', label: 'Полная занятость' },
+                { value: 'PART_TIME', label: 'Частичная занятость' },
+                { value: 'CONTRACT', label: 'Контракт' },
+                { value: 'REMOTE', label: 'Удалённая' },
               ]}
               error={errors.type?.message}
               {...register('type')}
             />
 
             <Input
-              label="Department"
-              placeholder="e.g. Engineering"
+              label="Отдел"
+              placeholder="Например: Engineering"
               error={errors.department?.message}
               {...register('department')}
             />
           </div>
 
           <Select
-            label="Status"
+            label="Статус вакансии"
             options={[
-              { value: 'OPEN', label: 'Open (visible to candidates)' },
-              { value: 'DRAFT', label: 'Draft (not visible)' },
+              { value: 'OPEN', label: 'Открыта (видно кандидатам)' },
+              { value: 'DRAFT', label: 'Черновик (не видна)' },
             ]}
             {...register('status')}
           />
 
           <div className="flex items-center justify-between pt-6 border-t border-slate-200">
-            <Link href="/vacancies">
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
+            <Link href="/vacancies" className="px-5 py-2 text-blue-600 rounded-xl border border-blue-600 text-sm font-medium
+                            transform hover:scale-105 hover:bg-blue-100 transition duration-500">
+              
+                Отмена
+              
             </Link>
-            <Button type="submit" loading={loading}>
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-              </svg>
-              Create Vacancy
-            </Button>
+            
+            <button
+              type="submit"
+              disabled={loading}
+              className="relative px-5 py-2 rounded-xl text-sm font-medium text-white overflow-hidden
+                        flex items-center justify-center transform hover:scale-105 transition-transform duration-500 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {/* Градиентный фон */}
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 z-0"></span>
+
+              {/* Содержимое кнопки поверх градиента */}
+              <span className="relative z-10 flex items-center gap-2">
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                </svg>
+                Создать вакансию
+              </span>
+            </button>
+
           </div>
         </form>
       </div>

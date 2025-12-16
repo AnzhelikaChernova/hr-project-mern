@@ -9,7 +9,13 @@ import { apolloClient } from '@/lib/apollo';
 import { NOTIFICATIONS_QUERY, NOTIFICATION_COUNT_QUERY } from '@/graphql/queries';
 import { MARK_NOTIFICATION_AS_READ_MUTATION, MARK_ALL_NOTIFICATIONS_AS_READ_MUTATION } from '@/graphql/mutations';
 import { NOTIFICATION_RECEIVED_SUBSCRIPTION } from '@/graphql/subscriptions';
-
+import Link from 'next/link';
+import {
+  Bell,
+  LogOut,
+  User,
+  LayoutDashboard,
+} from 'lucide-react';
 interface Notification {
   id: string;
   type: string;
@@ -156,19 +162,46 @@ export function Header() {
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 px-8 py-4">
-      <div className="flex items-center justify-between">
+    <nav className="sticky top-0 z-50 backdrop-blur-xl  shadow-md">
+      <div className="container mx-auto px-7 py-4 flex items-center justify-between">
+        {/* Левая часть */}
+        <Link href="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/0 flex items-center justify-center">
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+              >
+                <defs>
+                  <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="100%" stopColor="#8B5CF6" />
+                  </linearGradient>
+                </defs>
+                <path
+                  stroke="url(#logo-gradient)"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <span className="text-xl font-bold text-slate-900">HR Platform</span>
+          </Link>
         <div>
-          <h1 className="text-xl font-bold text-slate-900">
+          <h1 className="text-xl font-semibold text-slate-900">
             {getGreeting()}, {user?.firstName}!
           </h1>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <p className="text-sm text-slate-600">
             {user?.role === 'HR'
-              ? 'Manage your recruitment pipeline'
-              : 'Find your dream job today'}
+              ? 'Управляйте процессом найма'
+              : 'Найдите работу мечты'}
           </p>
         </div>
 
+        
+        {/* Правая часть */}
         <div className="flex items-center gap-4">
           {/* Notification Bell */}
           <div className="relative">
@@ -179,9 +212,7 @@ export function Header() {
               }}
               className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors"
             >
-              <svg className="w-6 h-6 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-              </svg>
+              <Bell className="w-6 h-6 text-slate-600" />
               {unreadCount > 0 && (
                 <span className="absolute top-1 right-1 w-5 h-5 bg-red-500 rounded-full text-white text-xs font-bold flex items-center justify-center">
                   {unreadCount}
@@ -192,39 +223,24 @@ export function Header() {
             {/* Notifications Dropdown */}
             {showNotifications && (
               <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowNotifications(false)}
-                />
+                <div className="fixed inset-0 z-40" onClick={() => setShowNotifications(false)} />
                 <div className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-slate-200 z-50 overflow-hidden animate-fade-in">
-                  <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+                  <div className="px-4 py-3 border-b flex items-center justify-between">
                     <h3 className="font-semibold text-slate-900">Notifications</h3>
-                    <div className="flex items-center gap-2">
-                      {unreadCount > 0 && (
-                        <>
-                          <button
-                            onClick={() => markAllAsRead()}
-                            className="text-xs text-blue-600 hover:text-blue-700 font-medium"
-                          >
-                            Mark all read
-                          </button>
-                          <span className="badge bg-red-50 text-red-600 ring-1 ring-red-500/10 text-xs">
-                            {unreadCount} new
-                          </span>
-                        </>
-                      )}
-                    </div>
+                    {unreadCount > 0 && (
+                      <button
+                        onClick={() => markAllAsRead()}
+                        className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                      >
+                        Mark all read
+                      </button>
+                    )}
                   </div>
 
                   <div className="max-h-96 overflow-y-auto">
                     {recentNotifications.length === 0 ? (
-                      <div className="px-4 py-8 text-center">
-                        <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center mx-auto mb-3">
-                          <svg className="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
-                          </svg>
-                        </div>
-                        <p className="text-slate-500 text-sm">No notifications yet</p>
+                      <div className="px-4 py-8 text-center text-slate-500 text-sm">
+                        No notifications yet
                       </div>
                     ) : (
                       recentNotifications.map((notification) => (
@@ -242,9 +258,7 @@ export function Header() {
                                 <p className={`text-sm ${!notification.read ? 'font-semibold text-slate-900' : 'font-medium text-slate-700'}`}>
                                   {notification.title}
                                 </p>
-                                {!notification.read && (
-                                  <span className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0 mt-1.5" />
-                                )}
+                                {!notification.read && <span className="w-2 h-2 rounded-full bg-blue-500 flex-shrink-0 mt-1.5" />}
                               </div>
                               <p className="text-sm text-slate-500 truncate">{notification.message}</p>
                               <p className="text-xs text-slate-400 mt-1">{getTimeAgo(notification.createdAt)}</p>
@@ -271,7 +285,7 @@ export function Header() {
             )}
           </div>
 
-          {/* User Menu */}
+          {/* User Dropdown */}
           <div className="relative">
             <button
               onClick={() => {
@@ -280,8 +294,9 @@ export function Header() {
               }}
               className="flex items-center gap-3 p-2 pr-4 rounded-xl hover:bg-slate-100 transition-colors"
             >
-              <div className="avatar avatar-md">
-                {user?.firstName?.[0]}{user?.lastName?.[0]}
+              <div className="avatar avatar-md bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-semibold">
+                {user?.firstName?.[0]}
+                {user?.lastName?.[0]}
               </div>
               <div className="text-left hidden sm:block">
                 <p className="text-sm font-semibold text-slate-900">{user?.fullName}</p>
@@ -294,10 +309,7 @@ export function Header() {
 
             {showDropdown && (
               <>
-                <div
-                  className="fixed inset-0 z-40"
-                  onClick={() => setShowDropdown(false)}
-                />
+                <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
                 <div className="dropdown dropdown-visible">
                   <div className="px-4 py-3 border-b border-slate-100">
                     <p className="text-sm font-semibold text-slate-900">{user?.fullName}</p>
@@ -305,32 +317,32 @@ export function Header() {
                   </div>
                   <div className="py-1">
                     <button
-                      onClick={() => { router.push('/profile'); setShowDropdown(false); }}
-                      className="dropdown-item w-full"
+                      onClick={() => {
+                        router.push('/profile');
+                        setShowDropdown(false);
+                      }}
+                      className="dropdown-item w-full flex items-center gap-2"
                     >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
-                      </svg>
+                      <User className="w-4 h-4" />
                       Profile Settings
                     </button>
                     <button
-                      onClick={() => { router.push('/dashboard'); setShowDropdown(false); }}
-                      className="dropdown-item w-full"
+                      onClick={() => {
+                        router.push('/dashboard');
+                        setShowDropdown(false);
+                      }}
+                      className="dropdown-item w-full flex items-center gap-2"
                     >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6z" />
-                      </svg>
+                      <LayoutDashboard className="w-4 h-4" />
                       Dashboard
                     </button>
                   </div>
                   <div className="border-t border-slate-100 py-1">
                     <button
                       onClick={handleLogout}
-                      className="dropdown-item w-full text-red-600 hover:bg-red-50"
+                      className="dropdown-item w-full text-red-600 hover:bg-red-50 flex items-center gap-2"
                     >
-                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-                      </svg>
+                      <LogOut className="w-4 h-4" />
                       Sign Out
                     </button>
                   </div>
@@ -339,7 +351,9 @@ export function Header() {
             )}
           </div>
         </div>
+
+
       </div>
-    </header>
+    </nav>
   );
 }

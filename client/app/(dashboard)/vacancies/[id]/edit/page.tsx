@@ -14,15 +14,15 @@ import { Button, Input, Select } from '@/components/ui';
 import Link from 'next/link';
 
 const vacancySchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(10, 'Description must be at least 10 characters'),
-  requirements: z.string().min(1, 'At least one requirement is needed'),
-  salaryMin: z.number().min(0, 'Minimum salary must be positive'),
-  salaryMax: z.number().min(0, 'Maximum salary must be positive'),
+  title: z.string().min(1, 'Название обязательно'),
+  description: z.string().min(10, 'Описание должно быть минимум 10 символов'),
+  requirements: z.string().min(1, 'Добавьте хотя бы одно требование'),
+  salaryMin: z.number().min(0, 'Минимальная зарплата должна быть положительной'),
+  salaryMax: z.number().min(0, 'Максимальная зарплата должна быть положительной'),
   currency: z.string().default('USD'),
-  location: z.string().min(1, 'Location is required'),
+  location: z.string().min(1, 'Местоположение обязательно'),
   type: z.enum(['FULL_TIME', 'PART_TIME', 'CONTRACT', 'REMOTE']),
-  department: z.string().min(1, 'Department is required'),
+  department: z.string().min(1, 'Отдел обязателен'),
   status: z.enum(['OPEN', 'CLOSED', 'DRAFT']),
 });
 
@@ -41,7 +41,7 @@ export default function EditVacancyPage() {
 
   const [updateVacancy, { loading: updating }] = useMutation(UPDATE_VACANCY_MUTATION, {
     onCompleted: (data) => {
-      addNotification({ type: 'success', message: 'Vacancy updated successfully!' });
+      addNotification({ type: 'success', message: 'Вакансия успешно обновлена!' });
       router.push(`/vacancies/${data.updateVacancy.id}`);
     },
     onError: (error) => {
@@ -65,7 +65,7 @@ export default function EditVacancyPage() {
 
   const vacancy = data?.vacancy;
 
-  // Populate form when data is loaded
+  // Заполнение формы при загрузке данных
   useEffect(() => {
     if (vacancy) {
       reset({
@@ -83,7 +83,6 @@ export default function EditVacancyPage() {
     }
   }, [vacancy, reset]);
 
-  // Check if user is owner
   const isOwner = isHR && vacancy?.createdBy?.id === user?.id;
 
   if (queryLoading) {
@@ -92,7 +91,7 @@ export default function EditVacancyPage() {
         <div className="card">
           <div className="flex flex-col items-center justify-center py-16">
             <div className="w-12 h-12 rounded-full border-4 border-blue-200 border-t-blue-600 animate-spin mb-4" />
-            <p className="text-slate-500">Loading vacancy...</p>
+            <p className="text-slate-500">Загрузка вакансии...</p>
           </div>
         </div>
       </div>
@@ -109,10 +108,10 @@ export default function EditVacancyPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Vacancy not found</h3>
-            <p className="text-slate-500 mb-6">The vacancy you're looking for doesn't exist or has been removed.</p>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">Вакансия не найдена</h3>
+            <p className="text-slate-500 mb-6">Искомая вакансия не существует или была удалена.</p>
             <Link href="/vacancies">
-              <Button>Back to Vacancies</Button>
+              <Button>Вернуться к вакансиям</Button>
             </Link>
           </div>
         </div>
@@ -130,10 +129,10 @@ export default function EditVacancyPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-2">Access Denied</h3>
-            <p className="text-slate-500 mb-6">You don't have permission to edit this vacancy.</p>
+            <h3 className="text-lg font-semibold text-slate-900 mb-2">Доступ запрещен</h3>
+            <p className="text-slate-500 mb-6">У вас нет прав для редактирования этой вакансии.</p>
             <Link href={`/vacancies/${params.id}`}>
-              <Button>View Vacancy</Button>
+              <Button>Посмотреть вакансию</Button>
             </Link>
           </div>
         </div>
@@ -176,13 +175,13 @@ export default function EditVacancyPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
               </svg>
             </Link>
-            <h1 className="text-2xl font-bold text-slate-900">Edit Vacancy</h1>
+            <h1 className="text-2xl font-bold text-slate-900">Редактировать вакансию</h1>
           </div>
-          <p className="text-slate-500 ml-11">Update your job posting details</p>
+          <p className="text-slate-500 ml-11">Обновите информацию о вакансии</p>
         </div>
         {isDirty && (
           <span className="badge bg-amber-50 text-amber-700 ring-1 ring-amber-600/10">
-            Unsaved changes
+            Есть несохранённые изменения
           </span>
         )}
       </div>
@@ -196,24 +195,24 @@ export default function EditVacancyPage() {
             </svg>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900">Job Details</h3>
-            <p className="text-sm text-slate-500">Edit the vacancy information below</p>
+            <h3 className="font-semibold text-slate-900">Детали вакансии</h3>
+            <p className="text-sm text-slate-500">Редактируйте информацию ниже</p>
           </div>
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <Input
-            label="Job Title"
-            placeholder="e.g. Senior Frontend Developer"
+            label="Название вакансии"
+            placeholder="Например: Senior Frontend Developer"
             error={errors.title?.message}
             {...register('title')}
           />
 
           <div>
-            <label className="label">Description</label>
+            <label className="label">Описание</label>
             <textarea
               className={`input min-h-40 resize-none ${errors.description ? 'input-error' : ''}`}
-              placeholder="Describe the role, responsibilities, and what makes it exciting..."
+              placeholder="Опишите роль, обязанности и преимущества..."
               {...register('description')}
             />
             {errors.description && (
@@ -222,35 +221,35 @@ export default function EditVacancyPage() {
           </div>
 
           <div>
-            <label className="label">Requirements (one per line)</label>
+            <label className="label">Требования (по одному на строку)</label>
             <textarea
               className={`input min-h-32 resize-none ${errors.requirements ? 'input-error' : ''}`}
-              placeholder="5+ years of React experience&#10;Strong TypeScript skills&#10;Experience with GraphQL"
+              placeholder="5+ лет опыта с React&#10;Знание TypeScript&#10;Опыт с GraphQL"
               {...register('requirements')}
             />
             {errors.requirements && (
               <p className="mt-1 text-sm text-red-600">{errors.requirements.message}</p>
             )}
-            <p className="mt-1 text-xs text-slate-500">Enter each requirement on a new line</p>
+            <p className="mt-1 text-xs text-slate-500">Каждое требование с новой строки</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Input
-              label="Min Salary"
+              label="Мин. зарплата"
               type="number"
               placeholder="80000"
               error={errors.salaryMin?.message}
               {...register('salaryMin', { valueAsNumber: true })}
             />
             <Input
-              label="Max Salary"
+              label="Макс. зарплата"
               type="number"
               placeholder="120000"
               error={errors.salaryMax?.message}
               {...register('salaryMax', { valueAsNumber: true })}
             />
             <Select
-              label="Currency"
+              label="Валюта"
               options={[
                 { value: 'USD', label: 'USD' },
                 { value: 'EUR', label: 'EUR' },
@@ -262,52 +261,64 @@ export default function EditVacancyPage() {
           </div>
 
           <Input
-            label="Location"
-            placeholder="e.g. San Francisco, CA or Remote"
+            label="Местоположение"
+            placeholder="Например: Алматы или Remote"
             error={errors.location?.message}
             {...register('location')}
           />
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Select
-              label="Job Type"
+              label="Тип работы"
               options={[
-                { value: 'FULL_TIME', label: 'Full Time' },
-                { value: 'PART_TIME', label: 'Part Time' },
-                { value: 'CONTRACT', label: 'Contract' },
-                { value: 'REMOTE', label: 'Remote' },
+                { value: 'FULL_TIME', label: 'Полный день' },
+                { value: 'PART_TIME', label: 'Частичная занятость' },
+                { value: 'CONTRACT', label: 'Контракт' },
+                { value: 'REMOTE', label: 'Удаленно' },
               ]}
               error={errors.type?.message}
               {...register('type')}
             />
 
             <Input
-              label="Department"
-              placeholder="e.g. Engineering"
+              label="Отдел"
+              placeholder="Например: Разработка"
               error={errors.department?.message}
               {...register('department')}
             />
           </div>
 
           <Select
-            label="Status"
+            label="Статус"
             options={[
-              { value: 'OPEN', label: 'Open (visible to candidates)' },
-              { value: 'CLOSED', label: 'Closed (no longer accepting applications)' },
-              { value: 'DRAFT', label: 'Draft (not visible)' },
+              { value: 'OPEN', label: 'Открыта (видна кандидатам)' },
+              { value: 'CLOSED', label: 'Закрыта (прием заявок закрыт)' },
+              { value: 'DRAFT', label: 'Черновик (не видна)' },
             ]}
             {...register('status')}
           />
 
+          {/* Кнопки */}
           <div className="flex items-center justify-between pt-6 border-t border-slate-200">
-            <Link href={`/vacancies/${params.id}`}>
-              <Button type="button" variant="outline">
-                Cancel
-              </Button>
+            {/* Левая кнопка */}
+            <Link
+              href={`/vacancies/${params.id}`}
+              className="px-5 py-2 text-blue-600 rounded-xl border border-blue-600 text-sm font-medium
+                         transform hover:scale-105 hover:bg-blue-100 transition duration-500"
+            >
+              Отмена
             </Link>
-            <Button type="submit" loading={updating} disabled={!isDirty}>
-              Save Changes
-            </Button>
+
+            {/* Правая градиентная кнопка */}
+            <button
+              type="submit"
+              disabled={!isDirty || updating}
+              className="relative px-5 py-2 rounded-xl text-sm font-medium text-white overflow-hidden
+                         flex items-center justify-center transform hover:scale-105 transition-transform duration-500"
+            >
+              <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 z-0"></span>
+              <span className="relative z-10">Сохранить изменения</span>
+            </button>
           </div>
         </form>
       </div>

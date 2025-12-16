@@ -77,80 +77,30 @@ export default function ApplicationsPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
-            {isHR ? 'Applications' : 'My Applications'}
+            {isHR ? 'Отклики' : 'Мои отклики'}
           </h1>
           <p className="text-slate-500 mt-1">
             {isHR
-              ? 'Review and manage candidate applications'
-              : 'Track the status of your job applications'}
+              ? 'Просматривайте и управляйте откликами кандидатов'
+              : 'Просматривайте статус ваших откликов'}
           </p>
         </div>
         {!isHR && (
-          <Link href="/vacancies">
-            <Button className="gap-2">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-              </svg>
-              Browse Jobs
-            </Button>
-          </Link>
+          <Link
+                  href="/vacancies"
+                  className="px-5 py-2 text-blue-600 rounded-xl border border-blue-600 text-sm font-medium
+                            transform hover:scale-105 hover:bg-blue-100 transition duration-500"
+                >
+                  Искать вакансии
+                </Link>
         )}
       </div>
 
-      {/* Status Stats for HR */}
-      {isHR && (
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-          <div className="card p-4 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center">
-              <svg className="w-6 h-6 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-slate-900">-</p>
-              <p className="text-xs text-slate-500">Pending Review</p>
-            </div>
-          </div>
-          <div className="card p-4 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center">
-              <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-slate-900">-</p>
-              <p className="text-xs text-slate-500">Under Review</p>
-            </div>
-          </div>
-          <div className="card p-4 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center">
-              <svg className="w-6 h-6 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-slate-900">-</p>
-              <p className="text-xs text-slate-500">Interviews</p>
-            </div>
-          </div>
-          <div className="card p-4 flex items-center gap-4">
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
-              <svg className="w-6 h-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-slate-900">-</p>
-              <p className="text-xs text-slate-500">Offers Made</p>
-            </div>
-          </div>
-        </div>
-      )}
+      
 
       {/* Filter Section */}
       {isHR && (
-        <div className="card">
+        <div className="">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="text-sm font-medium text-slate-700">Filter by status:</span>

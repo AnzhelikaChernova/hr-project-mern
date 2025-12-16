@@ -2,122 +2,146 @@
 
 import Link from 'next/link';
 import { useAuthStore } from '@/lib/stores/auth';
+import {
+  Briefcase,
+  
+  Search,
+  Calendar,
+  Layers,
+  MessageCircle,
+  Zap,
+  Clipboard,
+  Bell,
+} from 'lucide-react';
+import InfoCard from '@/components/ui/InfoCard';
 
 export default function HomePage() {
   const { isAuthenticated } = useAuthStore();
 
+  const hrFeatures = [
+    { text: 'Создание вакансий', icon: <Briefcase /> },
+    { text: 'Воронка кандидатов', icon: <Layers /> },
+    { text: 'Интервью и встречи', icon: <Calendar /> },
+    { text: 'Статусы и комментарии', icon: <MessageCircle /> },
+  ];
+
+  const candidateFeatures = [
+    { text: 'Актуальные вакансии', icon: <Search /> },
+    { text: 'Быстрый отклик', icon: <Zap /> },
+    { text: 'История заявок', icon: <Clipboard /> },
+    { text: 'Уведомления', icon: <Bell /> },
+  ];
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-900 via-primary-800 to-secondary-900">
-      <nav className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="text-2xl font-bold text-white">HR Platform</div>
-          <div className="space-x-4">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-400/5 to-purple-400/10 text-slate-900">
+      {/* Navbar */}
+      <nav className="sticky top-0 z-50 backdrop-blur-xl shadow-md">
+        <div className="container mx-auto px-7 py-4 flex items-center justify-between">
+          {/* Логотип */}
+          <Link href="/" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/0 flex items-center justify-center">
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={2}
+              >
+                <defs>
+                  <linearGradient id="logo-gradient" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stopColor="#3B82F6" />
+                    <stop offset="100%" stopColor="#8B5CF6" />
+                  </linearGradient>
+                </defs>
+                <path
+                  stroke="url(#logo-gradient)"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <span className="text-xl font-bold text-slate-900">HR Platform</span>
+          </Link>
+
+          {/* Кнопки */}
+          <div className="flex space-x-3">
             {isAuthenticated ? (
               <Link
                 href="/dashboard"
-                className="btn-primary"
+                className="relative px-5 py-2 rounded-xl text-sm font-medium text-white overflow-hidden
+                          flex items-center justify-center transform hover:scale-105 transition-transform duration-500"
               >
-                Dashboard
+                <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 z-0"></span>
+                <span className="relative z-10">Dashboard</span>
               </Link>
             ) : (
               <>
                 <Link
                   href="/login"
-                  className="text-white hover:text-primary-200 transition-colors"
+                  className="px-5 py-2 text-blue-600 rounded-xl border border-blue-600 text-sm font-medium
+                            transform hover:scale-105 hover:bg-blue-100 transition duration-500"
                 >
-                  Sign In
+                  Sign in
                 </Link>
+
                 <Link
                   href="/register"
-                  className="btn bg-white text-primary-700 hover:bg-primary-50"
+                  className="relative px-5 py-2 rounded-xl text-sm font-medium text-white overflow-hidden
+                            flex items-center justify-center transform hover:scale-105 transition-transform duration-500"
                 >
-                  Get Started
+                  <span className="absolute inset-0 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 z-0"></span>
+                  <span className="relative z-10">Sign up</span>
                 </Link>
               </>
             )}
           </div>
+
         </div>
       </nav>
 
-      <main className="container mx-auto px-6 py-20">
-        <div className="text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-            Modern Recruitment
-            <br />
-            <span className="text-primary-300">Made Simple</span>
+      {/* Hero */}
+      <main className="container mx-auto px-6 py-24">
+        <div className="max-w-3xl mx-auto text-center mb-24">
+          <h1 className="text-5xl md:text-6xl font-semibold mb-6 leading-tight">
+            Простой и понятный
+            <span className="block bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+              процесс найма
+            </span>
           </h1>
-          <p className="text-xl text-primary-100 mb-10 max-w-2xl mx-auto">
-            Streamline your hiring process with our comprehensive HR platform.
-            Post vacancies, manage applications, and schedule interviews all in one place.
+          <p className="text-lg text-slate-600">
+            HR-платформа для работы с вакансиями, кандидатами и интервью —
+            всё в одном аккуратном интерфейсе.
           </p>
-          <div className="space-x-4">
-            <Link
-              href="/register"
-              className="btn bg-white text-primary-700 hover:bg-primary-50 text-lg px-8 py-3"
-            >
-              Start Hiring
-            </Link>
-            <Link
-              href="/vacancies"
-              className="btn border-2 border-white text-white hover:bg-white/10 text-lg px-8 py-3"
-            >
-              Browse Jobs
-            </Link>
-          </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 mt-20">
-          <FeatureCard
-            icon="📋"
-            title="Post Vacancies"
-            description="Create detailed job postings with requirements, salary ranges, and company information."
+        {/* Карточки */}
+        <div className="grid md:grid-cols-2 gap-10">
+          <InfoCard
+            title="Для HR-менеджеров"
+            text="Контролируйте каждый этап найма в одном месте."
+            features={hrFeatures}
+            actionText="Разместить вакансию"
+            href={'/dashboard'}
+            accent="from-blue-600 to-purple-600"
           />
-          <FeatureCard
-            icon="👥"
-            title="Manage Applications"
-            description="Review applications, track candidate status, and manage the hiring pipeline efficiently."
-          />
-          <FeatureCard
-            icon="📅"
-            title="Schedule Interviews"
-            description="Coordinate interviews, collect feedback, and make informed hiring decisions."
+
+          <InfoCard
+            title="Для кандидатов"
+            text="Находите работу и отслеживайте статус откликов."
+            features={candidateFeatures}
+            actionText="Найти вакансии"
+            href="/vacancies"
+            accent="from-blue-600 to-purple-600"
           />
         </div>
 
-        <div className="mt-20 text-center">
-          <h2 className="text-3xl font-bold text-white mb-8">
-            Real-time Updates
-          </h2>
-          <p className="text-primary-100 max-w-xl mx-auto">
-            Get instant notifications when candidates apply or when your application status changes.
-            Stay connected with the hiring process in real-time.
-          </p>
-        </div>
+      
       </main>
 
-      <footer className="container mx-auto px-6 py-8 border-t border-primary-700/50">
-        <div className="text-center text-primary-300 text-sm">
-          HR Recruitment Platform - University Project
-        </div>
+      {/* Footer */}
+      <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
+        HR Recruitment Platform
       </footer>
-    </div>
-  );
-}
-
-function FeatureCard({
-  icon,
-  title,
-  description,
-}: {
-  icon: string;
-  title: string;
-  description: string;
-}) {
-  return (
-    <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-      <div className="text-4xl mb-4">{icon}</div>
-      <h3 className="text-xl font-semibold text-white mb-2">{title}</h3>
-      <p className="text-primary-100">{description}</p>
     </div>
   );
 }
